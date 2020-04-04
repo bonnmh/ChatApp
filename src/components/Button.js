@@ -1,14 +1,25 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import Color from '../utils/Colors';
 import {TextCmp} from '.';
+import {Constants} from '../const';
 
 const Button = (props) => {
-  const {title = 'Enter', style = {}, textStyle = {}, onPress} = props;
+  const {
+    title = 'Enter',
+    style = {},
+    textStyle = {},
+    onPress,
+    loading = false,
+  } = props;
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-      <TextCmp style={[styles.text, textStyle]}> {title}</TextCmp>
+      {loading ? (
+        <ActivityIndicator size="small" color="#fff" />
+      ) : (
+        <TextCmp style={[styles.text, textStyle]}> {title}</TextCmp>
+      )}
     </TouchableOpacity>
   );
 };
@@ -17,8 +28,6 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     borderRadius: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 20,
@@ -28,6 +37,7 @@ const styles = StyleSheet.create({
     shadowOffset: {height: 10, width: 10},
     shadowRadius: 20,
     elevation: 2,
+    width: Constants.screenWidth * 0.8,
   },
   text: {
     fontSize: 16,

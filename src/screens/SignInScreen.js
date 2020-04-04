@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
 } from 'react-native';
+import firebase from '../firebase/Firebase';
 import {
   Button,
   EmailTextField,
@@ -15,7 +16,7 @@ import {
 import Strings from '../const/String';
 import Utility from '../utils/Utility';
 import Constants from '../const/Constants';
-import {Color} from '../utils';
+import {Color, Logg} from '../utils';
 import {images} from '../const';
 
 function SignInScreen() {
@@ -38,8 +39,47 @@ function SignInScreen() {
       : setPasswordError(Strings.PasswordFieldEmpty);
     return isValidField;
   };
-  const onPressJoin = () => {
-    alert(1);
+  const performAuth = () => {
+    const isValidEmail = validateEmailAddress();
+    const isValidPassword = validatePasswordField();
+    if (isValidEmail && isValidPassword) {
+      setEmailError('');
+      setPasswordError('');
+      registration();
+    }
+  };
+  const registration = () => {
+    try {
+      setLoading(true);
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((user) => {
+          Logg.info('user', user);
+          alert('logined!');
+          setLoading(false);
+        })
+        .catch((e) => {
+          Logg.info(e);
+          firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((user) => {
+              Logg.info(user);
+              alert('Create a new user!');
+            })
+            .catch((e) => {
+              Logg.error(e);
+              alert(e.message);
+            });
+          Logg.error(e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (error) {
+      Logg.error(error);
+    }
   };
   return (
     <DismissKeyboard>
@@ -63,7 +103,7 @@ function SignInScreen() {
           onTermChange={(pass) => setPassword(pass)}
           onValidatePasswordField={validatePasswordField}
         />
-        <Button title={Strings.Join} onPress={onPressJoin} />
+        <Button loading={loading} title={Strings.Join} onPress={performAuth} />
       </KeyboardAvoidingView>
     </DismissKeyboard>
   );
