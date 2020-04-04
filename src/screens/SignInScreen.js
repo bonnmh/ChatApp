@@ -18,8 +18,9 @@ import Utility from '../utils/Utility';
 import Constants from '../const/Constants';
 import {Color, Logg} from '../utils';
 import {images} from '../const';
+import {IDs} from './IDs';
 
-function SignInScreen() {
+function SignInScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -55,22 +56,24 @@ function SignInScreen() {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((user) => {
-          Logg.info('user', user);
-          alert('logined!');
           setLoading(false);
+          navigation.reset({
+            index: 0,
+            routes: [{name: IDs.GroupScreens, user}],
+          });
         })
         .catch((e) => {
-          Logg.info(e);
           firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then((user) => {
-              Logg.info(user);
-              alert('Create a new user!');
+              navigation.reset({
+                index: 0,
+                routes: [{name: IDs.GroupScreens}],
+              });
             })
             .catch((e) => {
               Logg.error(e);
-              alert(e.message);
             });
           Logg.error(e);
         })

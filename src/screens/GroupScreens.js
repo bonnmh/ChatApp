@@ -1,19 +1,89 @@
-import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+/* eslint-disable react/self-closing-comp */
+import React, {useLayoutEffect, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import {ButtonWithBackground, GroupsItem} from '../components';
+import {IDs} from './IDs';
+import {firestore} from '../firebase/Firebase';
+import {images} from '../const';
 
-function GroupScreens() {
+function GroupsScreen({navigation}) {
+  const [groups, setGroups] = useState([]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <ButtonWithBackground
+          onPress={() => {
+            navigation.navigate(IDs.AddGroupScreen);
+          }}
+          image={images.add}
+        />
+      ),
+      headerLeft: () => {
+        <ButtonWithBackground onPress={() => {}} image={images.add} />;
+      },
+    });
+  });
+
+  useEffect(() => {
+    getChats();
+  }, []);
+
+  function getChats() {
+    const db = firestore;
+    var groupArray = [];
+
+    db.collection('groups').onSnapshot(function (snapshot) {
+      snapshot.docChanges().forEach(function (change) {
+        if (change.type == 'added') {
+          console.log('New Group: ', change.doc.data());
+          groupArray.push(change.doc.data());
+        }
+        if (change.type === 'modified') {
+          console.log('Modified Group: ', change.doc.data());
+        }
+        if (change.type === 'removed') {
+          console.log('Removed Group', change.doc.data());
+        }
+
+        setGroups(groupArray);
+      });
+    });
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Group</Text>
+      <FlatList
+        data={groups}
+        keyExtractor={(item, index) => 'key' + index}
+        renderItem={({item}) => {
+          return (
+            <GroupsItem
+              onPress={() => {
+                navigation.navigate(IDs.ChatScreen, {
+                  item,
+                });
+              }}
+              item={item}
+            />
+          );
+        }}></FlatList>
     </View>
   );
 }
-export default GroupScreens;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ebebeb',
   },
   text: {
     color: '#101010',
@@ -21,3 +91,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default GroupsScreen;
