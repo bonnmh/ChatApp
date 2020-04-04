@@ -1,12 +1,5 @@
-/* eslint-disable react/self-closing-comp */
 import React, {useLayoutEffect, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
 import {ButtonWithBackground, GroupsItem} from '../components';
 import {IDs} from './IDs';
 import {firestore} from '../firebase/Firebase';
@@ -59,21 +52,26 @@ function GroupsScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={groups}
-        keyExtractor={(item, index) => 'key' + index}
-        renderItem={({item}) => {
-          return (
-            <GroupsItem
-              onPress={() => {
-                navigation.navigate(IDs.ChatScreen, {
-                  item,
-                });
-              }}
-              item={item}
-            />
-          );
-        }}></FlatList>
+      {groups !== [] ? (
+        <FlatList
+          data={groups}
+          keyExtractor={(item, index) => 'key' + index}
+          renderItem={({item}) => {
+            return (
+              <GroupsItem
+                onPress={() => {
+                  navigation.navigate(IDs.ChatScreen, {
+                    item,
+                  });
+                }}
+                item={item}
+              />
+            );
+          }}
+        />
+      ) : (
+        <ActivityIndicator size="small" color="red" />
+      )}
     </View>
   );
 }

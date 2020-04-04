@@ -15,13 +15,13 @@ function ChatFolow() {
     <NavigationContainer
       onStateChange={(state) => console.log('New state is', state)}>
       <Stack.Navigator name="chat">
-        {/* <Stack.Screen
+        <Stack.Screen
           name={IDs.SignInScreen}
           component={SignInScreen}
           options={({navigation, route}) => ({
             headerShown: false,
           })}
-        /> */}
+        />
         <Stack.Screen
           name={IDs.GroupScreens}
           component={GroupScreens}

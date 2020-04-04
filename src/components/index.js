@@ -6,6 +6,8 @@ import DismissKeyboard from './DismissKeyboard';
 import ButtonWithBackground from './ButtonWithBackground';
 import CustomTextField from './CustomTextFeild';
 import GroupsItem from './GroupItems';
+import MessageItem from './MessageItem';
+import MessageFieldView from './MessageFieldView';
 
 export {
   TextCmp,
@@ -16,4 +18,6 @@ export {
   DismissKeyboard,
   CustomTextField,
   GroupsItem,
+  MessageFieldView,
+  MessageItem,
 };
