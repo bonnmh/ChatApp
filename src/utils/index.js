@@ -1,2 +1,4 @@
 import Logg from './Logg';
-export {Logg};
+import Color from './Colors';
+
+export {Logg, Color};
