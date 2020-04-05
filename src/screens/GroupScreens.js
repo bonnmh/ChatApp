@@ -1,13 +1,19 @@
 import React, {useLayoutEffect, useEffect, useState} from 'react';
-import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
-import {ButtonWithBackground, GroupsItem} from '../components';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import {ButtonWithBackground, GroupsItem, TextCmp} from '../components';
 import {IDs} from './IDs';
-import {firestore} from '../firebase/Firebase';
+import firebase, {firestore} from '../firebase/Firebase';
 import {Icons} from '../assets';
 
 function GroupsScreen({navigation}) {
   const [groups, setGroups] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -31,29 +37,43 @@ function GroupsScreen({navigation}) {
   function getChats() {
     const db = firestore;
     var groupArray = [];
+    setLoading(true);
+    try {
+      db.collection('groups').onSnapshot(function (snapshot) {
+        snapshot.docChanges().forEach(function (change) {
+          if (change.type === 'added') {
+            console.log('New Group: ', change.doc.data());
+            groupArray.push(change.doc.data());
+          }
+          if (change.type === 'modified') {
+            console.log('Modified Group: ', change.doc.data());
+          }
+          if (change.type === 'removed') {
+            console.log('Removed Group', change.doc.data());
+          }
 
-    db.collection('groups').onSnapshot(function (snapshot) {
-      snapshot.docChanges().forEach(function (change) {
-        if (change.type == 'added') {
-          console.log('New Group: ', change.doc.data());
-          groupArray.push(change.doc.data());
-        }
-        if (change.type === 'modified') {
-          console.log('Modified Group: ', change.doc.data());
-        }
-        if (change.type === 'removed') {
-          console.log('Removed Group', change.doc.data());
-        }
-
-        setGroups(groupArray);
+          setGroups(groupArray);
+        });
       });
-    });
+    } catch (error) {
+      alert('er');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <View style={styles.container}>
-      {groups !== [] ? (
+      {!loading ? (
         <FlatList
+          ListHeaderComponent={() => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(IDs.TestFirebase);
+              }}>
+              <TextCmp>ok</TextCmp>
+            </TouchableOpacity>
+          )}
           data={groups}
           keyExtractor={(item, index) => 'key' + index}
           renderItem={({item}) => {
@@ -70,7 +90,7 @@ function GroupsScreen({navigation}) {
           }}
         />
       ) : (
-        <ActivityIndicator size="small" color="red" />
+        <ActivityIndicator size="large" color="red" />
       )}
     </View>
   );

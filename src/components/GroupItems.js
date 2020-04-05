@@ -1,13 +1,20 @@
 import React from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
-import {Constants, images} from '../const';
+import {Constants} from '../const';
 import {Color} from '../utils';
 import {TextCmp} from '.';
+import {Icons} from '../assets';
+
 function GroupsItem({item, onPress}) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.container2}>
-        <Image source={images.logo} style={styles.Image} />
+        <Image
+          resizeMethod="scale"
+          resizeMode="contain"
+          source={Icons.avatar}
+          style={styles.Image}
+        />
         <View style={styles.conatainer1}>
           <TextCmp style={styles.groupTitle}>{item.groupName}</TextCmp>
           <TextCmp style={styles.groupMembers}>{item.groupMembers}</TextCmp>

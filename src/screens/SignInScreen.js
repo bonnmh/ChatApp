@@ -5,6 +5,7 @@ import {
   Image,
   KeyboardAvoidingView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import firebase from '../firebase/Firebase';
 import {
@@ -49,45 +50,50 @@ function SignInScreen({}) {
     if (isValidEmail && isValidPassword) {
       setEmailError('');
       setPasswordError('');
-      registration();
+
+      registration(email, password);
     }
   };
-  const registration = () => {
+  const registration = (email, password) => {
     try {
       setLoading(true);
+
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((user) => {
           setLoading(false);
+
           navigation.reset({
             index: 0,
             routes: [{name: IDs.GroupScreens}],
           });
-          //   NavigatorService._push(IDs.GroupScreens);
+          // Alert.alert('Logged In')
         })
-        .catch((e) => {
+        .catch((error) => {
           firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then((user) => {
+              setLoading(false);
+              // Alert.alert('Create A New user')
               navigation.reset({
                 index: 0,
-                routes: [{name: IDs.GroupScreens}],
+                routes: [{name: 'Groups Screen'}],
               });
             })
-            .catch((e) => {
-              Logg.error(e);
+            .catch((error) => {
+              setLoading(false);
+              console.log('error');
+              Alert.alert(error.message);
             });
-          Logg.error(e);
-        })
-        .finally(() => {
-          setLoading(false);
         });
     } catch (error) {
-      Logg.error(error);
+      setLoading(false);
+      Alert.alert(error.message);
     }
   };
+
   return (
     <DismissKeyboard>
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>

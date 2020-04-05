@@ -8,6 +8,7 @@ import AddGroupScreen from '../screens/AddGroupScreen';
 import {IDs} from '../screens/IDs';
 import {TextCmp} from '../components';
 import {NavigatorService} from '../utils/services/navigator';
+import TestFirebase from '../screens/TestFirebase';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,13 @@ function ChatFolow() {
           component={ChatScreen}
           options={({navigation, route}) => ({
             title: 'Chat',
+          })}
+        />
+        <Stack.Screen
+          name={IDs.TestFirebase}
+          component={TestFirebase}
+          options={({navigation, route}) => ({
+            title: 'TestFirebase',
           })}
         />
       </Stack.Navigator>

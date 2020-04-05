@@ -3,4 +3,5 @@ export const IDs = {
   ChatScreen: 'ChatScreen',
   GroupScreens: 'GroupScreens',
   SignInScreen: 'SignInScreen',
+  TestFirebase: 'TestFirebase',
 };
