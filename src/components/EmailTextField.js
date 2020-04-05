@@ -2,17 +2,21 @@ import React from 'react';
 import {TextInput, Text, StyleSheet, View} from 'react-native';
 import Color from '../utils/Colors';
 import Constants from '../const/Constants';
+import {Icons} from '../assets';
+import {normalize} from '../utils/Normalize';
 
 const EmailTextField = ({
   term,
-  placeHolder,
+  placeHolder = 'enter',
   OnTermChange,
   onValidateEmailAddress,
   error,
 }) => {
   return (
-    <View>
-      <Text style={styles.error}>{error}</Text>
+    <>
+      <View style={styles.containerErr}>
+        <Text style={styles.error}>{error}</Text>
+      </View>
       <View style={styles.TextFieldView}>
         <TextInput
           autoCorrect={false}
@@ -23,26 +27,25 @@ const EmailTextField = ({
           onEndEditing={onValidateEmailAddress}
         />
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   TextField: {
-    fontSize: 14,
+    fontSize: normalize(14),
     flex: 1,
-    marginHorizontal: 20,
   },
   TextFieldView: {
-    height: Constants.screenHeight * 0.06,
-    width: Constants.screenWidth * 0.85,
+    width: Constants.screenWidth * 0.8,
     borderRadius: 10,
     marginTop: 5,
     marginBottom: 10,
     borderColor: Color.black,
-    borderWidth: 1,
-    justifyContent: 'center',
+    borderWidth: 0.5,
     backgroundColor: Color.smoke,
+    minHeight: 50,
+    paddingHorizontal: 10,
   },
   ErrorText: {
     fontSize: 12,
@@ -52,6 +55,9 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+  },
+  containerErr: {
+    width: Constants.screenWidth * 0.8,
   },
 });
 

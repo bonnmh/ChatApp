@@ -3,7 +3,7 @@ import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
 import {ButtonWithBackground, GroupsItem} from '../components';
 import {IDs} from './IDs';
 import {firestore} from '../firebase/Firebase';
-import {images} from '../const';
+import {Icons} from '../assets';
 
 function GroupsScreen({navigation}) {
   const [groups, setGroups] = useState([]);
@@ -15,11 +15,11 @@ function GroupsScreen({navigation}) {
           onPress={() => {
             navigation.navigate(IDs.AddGroupScreen);
           }}
-          image={images.add}
+          image={Icons.add}
         />
       ),
       headerLeft: () => {
-        <ButtonWithBackground onPress={() => {}} image={images.add} />;
+        <ButtonWithBackground onPress={() => {}} image={Icons.add} />;
       },
     });
   });

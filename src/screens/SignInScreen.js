@@ -17,12 +17,15 @@ import Strings from '../const/String';
 import Utility from '../utils/Utility';
 import Constants from '../const/Constants';
 import {Color, Logg} from '../utils';
-import {images} from '../const';
 import {IDs} from './IDs';
+import {Icons} from '../assets';
+import {useNavigation} from '@react-navigation/native';
+import {NavigatorService} from '../utils/services/navigator';
 
-function SignInScreen({navigation}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function SignInScreen({}) {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('Test@gmail.com');
+  const [password, setPassword] = useState('123456');
   const [passwordError, setPasswordError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,8 +62,9 @@ function SignInScreen({navigation}) {
           setLoading(false);
           navigation.reset({
             index: 0,
-            routes: [{name: IDs.GroupScreens, user}],
+            routes: [{name: IDs.GroupScreens}],
           });
+          //   NavigatorService._push(IDs.GroupScreens);
         })
         .catch((e) => {
           firebase
@@ -89,7 +93,7 @@ function SignInScreen({navigation}) {
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <View>
           <SafeAreaView>
-            <Image source={images.logo} style={styles.logo} />
+            <Image source={Icons.logo} style={styles.logo} />
           </SafeAreaView>
         </View>
         <EmailTextField
@@ -121,6 +125,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.theme,
+    backgroundColor: Color.background,
   },
 });

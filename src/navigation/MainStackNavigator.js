@@ -7,12 +7,16 @@ import GroupScreens from '../screens/GroupScreens';
 import AddGroupScreen from '../screens/AddGroupScreen';
 import {IDs} from '../screens/IDs';
 import {TextCmp} from '../components';
+import {NavigatorService} from '../utils/services/navigator';
 
 const Stack = createStackNavigator();
 
 function ChatFolow() {
   return (
     <NavigationContainer
+      ref={(ref) => {
+        NavigatorService.setContainer(ref);
+      }}
       onStateChange={(state) => console.log('New state is', state)}>
       <Stack.Navigator name="chat">
         <Stack.Screen
